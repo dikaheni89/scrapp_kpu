@@ -37,7 +37,6 @@ const getPlayDataCaleg = () => {
         for (let i = 0; i < dataConvert.length; i++) {
             if (dataConvert[i].startsWith('Partai') && dataConvert[i + 2].startsWith('nomor urut')) {
                 const candidate = {
-                    id: i,
                     party: dataConvert[i],
                     district: dataConvert[i + 1],
                     number: dataConvert[i + 2],
@@ -52,8 +51,7 @@ const getPlayDataCaleg = () => {
         }
 
         for (let i = 0; i < candidates.length; i++) {
-            await connectPg.query("INSERT INTO caleg (id, party, district, number, name, gender, gelar, city) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)", [
-                candidates[i].id,
+            await connectPg.query("INSERT INTO caleg (party, district, number, name, gender, gelar, city) VALUES ($1, $2, $3, $4, $5, $6, $7)", [
                 candidates[i].party,
                 candidates[i].district,
                 candidates[i].number,
@@ -62,7 +60,9 @@ const getPlayDataCaleg = () => {
                 candidates[i].gelar,
                 candidates[i].city
             ]);
+            console.log(`Progress: Inserted ${i+1} of ${candidates.length}`);
         }
+        console.log('Done');
     })
 }
 
